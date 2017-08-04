@@ -1,0 +1,56 @@
+---
+title: "Search info about Twitter users"
+author: "Roberto Muñoz"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
+    #number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(width=100)
+```
+
+#Loading libraries and Twitter credentials
+
+##Loading libraries
+```{r}
+library("rtweet")
+source("crypt.R")
+```
+
+##Loading Twitter credentials
+```{r}
+key_file <- file.path(path.expand("~"), "Data/key.RData")
+credentials_file <- file.path(path.expand("~"), "Data/twitter_credentials.dat")
+
+if (file.exists(key_file)){
+  load(key_file)
+} else {
+  print("Execute script 01_encriptar_key.R")
+}
+
+if (file.exists(credentials_file)) {
+  credentials <- read.aes(filename = credentials_file, key = key)
+} else {
+  print("Execute script 01_encriptar_key.R")
+}
+```
+
+##Seeting up tokens
+```{r}
+twitter_token <- create_token(app = "rtweet_token", consumer_key = credentials$consumer_key, consumer_secret = credentials$consumer_secret)
+```
+
+#Get user followers
+```{r}
+followers <- get_followers(user="FORCE11SCI")
+followers_df <- lookup_users(followers)
+colnames(followers_df)
+
+print(followers_df[c('name','location')], right=FALSE)
+```
+
