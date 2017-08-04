@@ -45,12 +45,31 @@ if (file.exists(credentials_file)) {
 twitter_token <- create_token(app = "rtweet_token", consumer_key = credentials$consumer_key, consumer_secret = credentials$consumer_secret)
 ```
 
-#Get user followers
+#Display Twitter followers of user FORCE11SCI
 ```{r}
 followers <- get_followers(user="FORCE11SCI")
 followers_df <- lookup_users(followers)
-colnames(followers_df)
+#colnames(followers_df)
 
+cat("Followers of user: ", "FORCE11SCI")
+```
+
+```{r, echo=FALSE}
 print(followers_df[c('name','location')], right=FALSE)
 ```
+
+
+```{r}
+users <- get_friends(followers_df$user_id[1])
+users_df <- lookup_users(users)
+
+cat("Accounts followed by the user: ", toString(followers_df$name[1]))
+```
+
+```{r, echo=FALSE}
+print(users_df[c('name','location')], right=FALSE)
+```
+
+
+
 
